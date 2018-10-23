@@ -1,0 +1,31 @@
+{
+  "name": "jaggerWs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node --presets env ./src/app.js",
+    "build": "webpack-cli",
+    "prod": "node bundle.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.14",
+    "uuid": "^3.3.2",
+    "ws": "^6.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "nodemon": "^1.12.1",
+    "uglifyjs-webpack-plugin": "^1.1.1",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^3.0.8"
+  }
+}
