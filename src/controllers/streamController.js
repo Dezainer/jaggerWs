@@ -2,6 +2,7 @@ import uuidv1 from 'uuid/v1'
 
 import ConnectionService from '../services/connectionService'
 import FilteringService from '../services/filteringService'
+import PositionService from '../services/positionService'
 
 import StreamHelper from '../helpers/streamHelper'
 import StorageHelper from '../helpers/storageHelper'
@@ -15,8 +16,6 @@ const frames = new StorageHelper()
 const recording = new StorageHelper()
 
 const timeoutHelper = new TimeoutHelper()
-
-let isRecording = false
 
 const handleConnection = (url, ws) => {
 	let type = ConnectionService.getTypeFromUrl(url)
@@ -49,11 +48,18 @@ const startStreaming = () => {
 		let lastFrame = {}
 
 		Object.keys(tracking.getAll()).map(key => {
-			lastFrame[key] = FilteringService.filter(tracking.get(key), frames.get(key))
+			let filtered = FilteringService.filter(tracking.get(key), frames.get(key))
+			if(!filtered) return
+			
+			lastFrame[key] = {
+				orientation: filtered.orientation,
+				position: filtered.acceleration // PositionService.getPosition
+			}
+
 			tracking.clear(key)
 		})	
 
-		observers.broadcast(lastFrame)
+		lastFrame && observers.broadcast(lastFrame)
 		saveFrame(lastFrame)
 	})
 
