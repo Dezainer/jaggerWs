@@ -1,14 +1,9 @@
-const filter = (data, history) => {
-	if(data.length == 0) return
-
-	let orientation = roundPoint(getAveragePoint(getPropFromData(data, 'orientation'))),
-		acceleration = roundPoint(getAveragePoint(getPropFromData(data, 'acceleration')))
-
-	console.log(acceleration)
-	console.log(orientation)
-
-	return { acceleration, orientation }
-}
+const filter = (data, history) => (
+	data.length != 0 && {
+		orientation: roundPoint(getAveragePoint(getPropFromData(data, 'orientation'))),
+		acceleration: roundPoint(getAveragePoint(getPropFromData(data, 'acceleration')))
+	}
+)
 
 const getPropFromData = (data, prop) => (
 	data.map(item => item[prop])

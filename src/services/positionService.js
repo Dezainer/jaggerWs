@@ -1,9 +1,21 @@
-const getPosition = (currentAcceleration, lastVelocity) => (
-	getPositionFromAcceleration(currentAcceleration, 1000 / 24, lastVelocity)
+const t = 1 / 24
+
+const getDisplacement = (vi, a) => (
+	vi * t + (a * (t * t) / 2)
 )
 
-const getPositionFromAcceleration = (a, t, v) => (
-	((a * t) + v) * t
+const getFinalVelocity = (vi, a) => (
+	(a * t) + vi
 )
 
-export default { getPosition }
+const displacePosition = (pi, s) => ({
+	x: (pi ? pi.x : 0) + s.x,
+	y: (pi ? pi.y : 0) + s.y,
+	z: (pi ? pi.z : 0) + s.z
+})
+
+export default { 
+	getDisplacement,
+	getFinalVelocity,
+	displacePosition
+}

@@ -13,7 +13,7 @@ const observers = new StreamHelper()
 
 const tracking = new StorageHelper()
 const frames = new StorageHelper()
-const recording = new StorageHelper()
+const velocities = new StorageHelper()
 
 const timeoutHelper = new TimeoutHelper()
 
@@ -53,17 +53,36 @@ const startStreaming = () => {
 			
 			lastFrame[key] = {
 				orientation: filtered.orientation,
-				position: filtered.acceleration // PositionService.getPosition
+				position: getPosition(key, filtered.acceleration)
 			}
 
 			tracking.clear(key)
 		})	
 
+		console.log(lastFrame)
 		lastFrame && observers.broadcast(lastFrame)
 		saveFrame(lastFrame)
 	})
 
 	timeoutHelper.start()
+}
+
+const getPosition = (key, acceleration) => {
+	let displacement = {},
+		finalVelocity = {},
+		frameHistory = frames.get(key),
+		initialPosition = frameHistory.length === 0 ? null : frameHistory[frameHistory.length - 1].position
+
+	Object.keys(acceleration).map(axis => {
+		let vis = velocities.get(key),
+			vi = vis.length === 0 ? 0 : vis[vis.length - 1][axis]
+		
+		displacement[axis] = PositionService.getDisplacement(vi, acceleration[axis])
+		finalVelocity[axis] = PositionService.getFinalVelocity(vi, acceleration[axis])
+	})
+
+	velocities.add(key, finalVelocity)
+	return PositionService.displacePosition(initialPosition, displacement)
 }
 
 const saveFrame = frame => {
