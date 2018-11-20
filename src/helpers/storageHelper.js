@@ -20,10 +20,15 @@ export default () => {
 		data
 	)
 
+	const reset = () => {
+		data = {}
+	}
+
 	return {
 		add,
 		get,
 		clear,
-		getAll
+		getAll,
+		reset
 	}
 }

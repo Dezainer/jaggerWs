@@ -3,10 +3,12 @@ import uuidv1 from 'uuid/v1'
 import ConnectionService from '../services/connectionService'
 import FilteringService from '../services/filteringService'
 import PositionService from '../services/positionService'
+import KeyframeService from '../services/keyframeService'
+import ExportService from '../services/exportService'
 
-import StreamHelper from '../helpers/streamHelper'
-import StorageHelper from '../helpers/storageHelper'
 import TimeoutHelper from '../helpers/timeoutHelper'
+import StorageHelper from '../helpers/storageHelper'
+import StreamHelper from '../helpers/streamHelper'
 
 const trackers = new StreamHelper()
 const observers = new StreamHelper()
@@ -18,6 +20,14 @@ const velocities = new StorageHelper()
 const accelerations = new StorageHelper()
 
 const timeoutHelper = new TimeoutHelper()
+
+trackers.onAllDisconnected(() => {
+	stopStreaming()
+
+	ExportService.exportTracking(frames.getAll())
+		.then(() => frames.reset())
+		.catch(err => console.log(err))
+})
 
 const handleConnection = (url, ws) => {
 	let type = ConnectionService.getTypeFromUrl(url)
@@ -39,8 +49,6 @@ const handleTracker = tracker => {
 
 		startStreaming()
 	})
-
-	trackers.onAllDisconnected(() => stopStreaming())
 }
 
 const startStreaming = () => {
