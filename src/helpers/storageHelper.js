@@ -12,6 +12,10 @@ export default () => {
 		data[key] || []
 	)
 
+	const set = (key, value) => {
+		data[key] = value
+	}
+
 	const clear = key => {
 		data[key] = []
 	}
@@ -27,6 +31,7 @@ export default () => {
 	return {
 		add,
 		get,
+		set,
 		clear,
 		getAll,
 		reset
