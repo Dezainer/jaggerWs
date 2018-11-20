@@ -1,11 +1,11 @@
-const t = 1 / 24
+const dt = 1 / 24
 
-const getDisplacement = (vi, a) => (
-	vi * t + (a * (t * t) / 2)
+const getDisplacement = (vi, vf) => (
+	((vi + vf) / 2) * dt
 )
 
-const getFinalVelocity = (vi, a) => (
-	(a * t) + vi
+const getFinalVelocity = (ai, af) => (
+	((ai + af) / 2) * dt
 )
 
 const displacePosition = (pi, s) => ({

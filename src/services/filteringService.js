@@ -27,7 +27,7 @@ const roundPoint = point => {
 	let round = {}
 
 	Object.keys(point).map(key => {
-		round[key] = point[key].toFixed(2)
+		round[key] = Number(point[key].toFixed(2))
 	})
 
 	return round
