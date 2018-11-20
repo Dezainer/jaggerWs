@@ -16,9 +16,11 @@ export default () => {
 
 	const broadcast = msg => {
 		clients.forEach(client => {
-			client.readyState === client.CLOSED
-				? unsubscribe(client)
-				: client.send(JSON.stringify(msg))
+			client.readyState === client.OPEN &&
+				client.send(JSON.stringify(msg))
+				
+			client.readyState === client.CLOSED || client.readyState === client.CLOSING &&
+				unsubscribe(client)
 		})
 	}
 
