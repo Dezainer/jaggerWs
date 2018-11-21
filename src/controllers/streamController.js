@@ -60,10 +60,7 @@ const startStreaming = () => {
 			let filtered = FilteringService.filter(tracking.get(key), frames.get(key))
 			if(!filtered) return
 			
-			if(!firstOrientation) {
-				firstOrientation = filtered.orientation
-				console.log(firstOrientation)
-			}
+			if(!firstOrientation) firstOrientation = filtered.orientation
 
 			lastFrame[key] = {
 				orientation: RotationService.compensateInitialRotation(firstOrientation, filtered.orientation),
