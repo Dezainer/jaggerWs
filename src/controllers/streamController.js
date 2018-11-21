@@ -3,10 +3,13 @@ import uuidv1 from 'uuid/v1'
 import ConnectionService from '../services/connectionService'
 import FilteringService from '../services/filteringService'
 import PositionService from '../services/positionService'
+import RotationService from '../services/rotationService'
+import KeyframeService from '../services/keyframeService'
+import ExportService from '../services/exportService'
 
-import StreamHelper from '../helpers/streamHelper'
-import StorageHelper from '../helpers/storageHelper'
 import TimeoutHelper from '../helpers/timeoutHelper'
+import StorageHelper from '../helpers/storageHelper'
+import StreamHelper from '../helpers/streamHelper'
 
 const trackers = new StreamHelper()
 const observers = new StreamHelper()
@@ -18,6 +21,11 @@ const velocities = new StorageHelper()
 const accelerations = new StorageHelper()
 
 const timeoutHelper = new TimeoutHelper()
+
+trackers.onAllDisconnected(() => {
+	stopStreaming()
+	exportTracking()
+})
 
 const handleConnection = (url, ws) => {
 	let type = ConnectionService.getTypeFromUrl(url)
@@ -39,8 +47,6 @@ const handleTracker = tracker => {
 
 		startStreaming()
 	})
-
-	trackers.onAllDisconnected(() => stopStreaming())
 }
 
 const startStreaming = () => {
@@ -103,6 +109,19 @@ const stopStreaming = () => {
 
 const handleObserver = observer => {
 	observers.subscribe(observer)
+}
+
+const exportTracking = () => {
+	Object.keys(frames.getAll()).map(key => {
+		frames.set(key, frames.get(key).map(point => Object.assign(
+			point,
+			{ rotation: RotationService.quaternionToDegrees(point.orientation) }
+		)))
+	})
+
+	ExportService.exportTracking(frames.getAll())
+		.then(() => frames.reset())
+		.catch(err => console.log(err))
 }
 
 export default { handleConnection }
