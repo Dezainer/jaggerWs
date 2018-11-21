@@ -21,6 +21,7 @@ const velocities = new StorageHelper()
 const accelerations = new StorageHelper()
 
 const timeoutHelper = new TimeoutHelper()
+let firstOrientation
 
 trackers.onAllDisconnected(() => {
 	stopStreaming()
@@ -59,8 +60,13 @@ const startStreaming = () => {
 			let filtered = FilteringService.filter(tracking.get(key), frames.get(key))
 			if(!filtered) return
 			
+			if(!firstOrientation) {
+				firstOrientation = filtered.orientation
+				console.log(firstOrientation)
+			}
+
 			lastFrame[key] = {
-				orientation: filtered.orientation,
+				orientation: RotationService.compensateInitialRotation(firstOrientation, filtered.orientation),
 				acceleration: accelerations.get(key)[accelerations.get(key).length - 1],
 				velocity: velocities.get(key)[velocities.get(key).length - 1],
 				position: getPosition(key, filtered.acceleration)

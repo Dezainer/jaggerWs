@@ -1,4 +1,9 @@
+import Quaternion from 'quaternion'
 import quaternionToEuler from 'quaternion-to-euler'
+
+const compensateInitialRotation = (initial, current) => (
+	new Quaternion(current).div(new Quaternion(initial))
+)
 
 const quaternionToDegrees = q => {
 	let radians = quaternionToEuler([q.w, q.x, q.y, q.z])
@@ -13,4 +18,4 @@ const radiansToDegrees = rad => (
 	rad * (180 / Math.PI)
 )
 
-export default { quaternionToDegrees }
+export default { compensateInitialRotation, quaternionToDegrees }
