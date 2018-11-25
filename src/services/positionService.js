@@ -1,11 +1,7 @@
 const dt = 1 / 24
 
-const getDisplacement = (vi, vf) => (
-	((vi + vf) / 2) * dt
-)
-
-const getFinalVelocity = (ai, af) => (
-	((ai + af) / 2) * dt
+const integrateProperty = (pi, pf) => (
+	((pi + pf) / 2) * dt
 )
 
 const displacePosition = (pi, s) => ({
@@ -15,7 +11,6 @@ const displacePosition = (pi, s) => ({
 })
 
 export default { 
-	getDisplacement,
-	getFinalVelocity,
+	integrateProperty,
 	displacePosition
 }
