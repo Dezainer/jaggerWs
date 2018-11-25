@@ -90,8 +90,8 @@ const getPosition = (key, acceleration) => {
 		ai = ais.length === 0 ? { x: 0, y: 0, z: 0 } : ais[ais.length - 1]
 
 	Object.keys(acceleration).map(axis => {
-		finalVelocity[axis] = PositionService.getFinalVelocity(vi[axis], ai[axis], acceleration[axis])
-		displacement[axis] = PositionService.getDisplacement(vi[axis], finalVelocity[axis])
+		finalVelocity[axis] = PositionService.integrateProperty(vi[axis], ai[axis], acceleration[axis])
+		displacement[axis] = PositionService.integrateProperty(vi[axis], finalVelocity[axis])
 	})
 
 	velocities.add(key, finalVelocity)
