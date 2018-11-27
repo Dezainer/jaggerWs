@@ -39,7 +39,9 @@ const handleConnection = (url, ws) => {
 }
 
 const handleTracker = tracker => {
-	const uuid = uuidv1()
+	// const uuid = uuidv1()
+	// const uuid = Object.keys(tracking.getAll()).length.toString();
+	const uuid = "asd"
 	trackers.subscribe(tracker)
 
 	tracker.on('message', rawMsg => {
@@ -111,6 +113,7 @@ const stopStreaming = () => {
 }
 
 const handleObserver = observer => {
+	console.log('connected')
 	observers.subscribe(observer)
 }
 
